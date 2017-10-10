@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using CityInfo.API.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using CityInfo.API.Services;
+using CityInfo.API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.API
 {
@@ -25,10 +27,14 @@ namespace CityInfo.API
 
             // DI implementation
             services.AddTransient<IMailService, LocalMailService>();
+
+            // Add DB context
+            var connectionString = Configuration["connectionStrings:cityInfoDBConnectionString"];
+            services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, CityInfoContext cityInfoContext)
         {
             if (env.IsDevelopment())
             {
@@ -39,23 +45,10 @@ namespace CityInfo.API
                 app.UseExceptionHandler();
             }
 
+            cityInfoContext.EnsureSeedDataForContext();
+
             app.UseStatusCodePages();
             app.UseMvc();
-
-            /*
-            app.Run((context) =>
-            {
-                throw new Exception("Example Exception");
-            });
-            */
-
-
-            /*
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
-            */
         }
     }
 }
