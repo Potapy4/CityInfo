@@ -14,10 +14,7 @@ namespace CityInfo.API
     {
         public static IConfiguration Configuration { get; private set; }
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -27,6 +24,7 @@ namespace CityInfo.API
 
             // DI implementation
             services.AddTransient<IMailService, LocalMailService>();
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 
             // Add DB context
             var connectionString = Configuration["connectionStrings:cityInfoDBConnectionString"];
@@ -48,6 +46,17 @@ namespace CityInfo.API
             cityInfoContext.EnsureSeedDataForContext();
 
             app.UseStatusCodePages();
+
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<City, Models.CityWithoutPointsOfInterestDTO>();
+                cfg.CreateMap<City, Models.CityDTO>();
+                cfg.CreateMap<PointOfInterest, Models.PointOfInterestDTO>();
+                cfg.CreateMap<PointOfInterest, Models.PointOfInterestForUpdateDTO>();
+                cfg.CreateMap<Models.PointOfInterestForCreationDTO, PointOfInterest>();
+                cfg.CreateMap<Models.PointOfInterestForUpdateDTO, PointOfInterest>();
+            });
+
             app.UseMvc();
         }
     }
