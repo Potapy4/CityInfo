@@ -27,6 +27,7 @@ namespace CityInfo.API
 
             // DI implementation
             services.AddTransient<IMailService, LocalMailService>();
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 
             // Add DB context
             var connectionString = Configuration["connectionStrings:cityInfoDBConnectionString"];
@@ -48,6 +49,17 @@ namespace CityInfo.API
             cityInfoContext.EnsureSeedDataForContext();
 
             app.UseStatusCodePages();
+
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<City, Models.CityWithoutPointsOfInterestDTO>();
+                cfg.CreateMap<City, Models.CityDTO>();
+                cfg.CreateMap<PointOfInterest, Models.PointOfInterestDTO>();
+                cfg.CreateMap<PointOfInterest, Models.PointOfInterestForUpdateDTO>();
+                cfg.CreateMap<Models.PointOfInterestForCreationDTO, PointOfInterest>();
+                cfg.CreateMap<Models.PointOfInterestForUpdateDTO, PointOfInterest>();
+            });
+
             app.UseMvc();
         }
     }

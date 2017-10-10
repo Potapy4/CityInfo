@@ -11,14 +11,5 @@ namespace CityInfo.API.Entities
         {
             Database.EnsureCreated();
         }
-
-        /*
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("connectionstring");
-
-            base.OnConfiguring(optionsBuilder);
-        }
-        */
     }
 }
