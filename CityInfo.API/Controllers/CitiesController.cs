@@ -11,10 +11,7 @@ namespace CityInfo.API.Controllers
     {
         private ICityInfoRepository _cityInfoRepository;
 
-        public CitiesController(ICityInfoRepository cityInfoRepository)
-        {
-            _cityInfoRepository = cityInfoRepository;
-        }
+        public CitiesController(ICityInfoRepository cityInfoRepository) => _cityInfoRepository = cityInfoRepository;
 
         [HttpGet]
         public IActionResult GetCities()

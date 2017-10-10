@@ -10,15 +10,9 @@ namespace CityInfo.API.Services
     {
         private CityInfoContext _context;
 
-        public CityInfoRepository(CityInfoContext context)
-        {
-            _context = context;
-        }
+        public CityInfoRepository(CityInfoContext context) => _context = context;
 
-        public IEnumerable<City> GetCities()
-        {
-            return _context.Cities.OrderBy(c => c.Name).ToList();
-        }
+        public IEnumerable<City> GetCities() => _context.Cities.OrderBy(c => c.Name).ToList();
 
         public City GetCity(int cityId, bool includePointsOfInterest)
         {
@@ -34,23 +28,14 @@ namespace CityInfo.API.Services
                 .FirstOrDefault();
         }
 
-        public PointOfInterest GetPointOfInterestForCity(int cityId, int poinfOfInterestId)
-        {
-            return _context.PointsOfInterest
+        public PointOfInterest GetPointOfInterestForCity(int cityId, int poinfOfInterestId) => _context.PointsOfInterest
                 .Where(p => p.CityId == cityId && p.Id == poinfOfInterestId)
                 .FirstOrDefault();
-        }
 
-        public IEnumerable<PointOfInterest> GetPointsOfInterestForCity(int cityId)
-        {
-            return _context.PointsOfInterest
+        public IEnumerable<PointOfInterest> GetPointsOfInterestForCity(int cityId) => _context.PointsOfInterest
                 .Where(p => p.CityId == cityId).ToList();
-        }
 
-        public bool CityExists(int cityId)
-        {
-            return _context.Cities.Any(c => c.Id == cityId);
-        }
+        public bool CityExists(int cityId) => _context.Cities.Any(c => c.Id == cityId);
 
         public void AddPointOfInterestForCity(int cityId, PointOfInterest pointOfInterest)
         {
@@ -58,14 +43,8 @@ namespace CityInfo.API.Services
             city.PointsOfInterest.Add(pointOfInterest);
         }
 
-        public bool Save()
-        {
-            return (_context.SaveChanges() >= 0);
-        }
+        public bool Save() => (_context.SaveChanges() >= 0);
 
-        public void DeletePointOfInterest(PointOfInterest pointOfInterest)
-        {
-            _context.PointsOfInterest.Remove(pointOfInterest);
-        }
+        public void DeletePointOfInterest(PointOfInterest pointOfInterest) => _context.PointsOfInterest.Remove(pointOfInterest);
     }
 }
